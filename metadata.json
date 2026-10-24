@@ -1,6 +1,0 @@
-{
-  "name": "sorteoo.app - Sorteos de Instagram con Grabación Automática",
-  "description": "Plataforma moderna para realizar sorteos de comentarios de Instagram con grabación automática de video en formato vertical 9:16 para Reels y Stories.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
