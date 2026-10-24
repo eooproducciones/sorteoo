@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script>
+      (function() {
+        // Neutralize Vite HMR WebSocket connection in AI Studio iframe
+        try {
+          var OrigWS = window.WebSocket;
+          if (OrigWS) {
+            window.WebSocket = function(url, protocols) {
+              if (
+                protocols === 'vite-hmr' ||
+                (typeof url === 'string' && (url.indexOf('@vite') !== -1 || url.indexOf('vite-ws') !== -1))
+              ) {
+                var target = new EventTarget();
+                target.readyState = 1;
+                target.send = function() {};
+                target.close = function() {};
+                setTimeout(function() {
+                  try {
+                    target.dispatchEvent(new Event('open'));
+                  } catch (e) {}
+                }, 10);
+                return target;
+              }
+              return new OrigWS(url, protocols);
+            };
+            window.WebSocket.prototype = OrigWS.prototype;
+            window.WebSocket.CONNECTING = 0;
+            window.WebSocket.OPEN = 1;
+            window.WebSocket.CLOSING = 2;
+            window.WebSocket.CLOSED = 3;
+          }
+        } catch (e) {}
+
+        // Suppress unhandled WebSocket rejections from bubbling to platform error boundary
+        window.addEventListener('unhandledrejection', function(event) {
+          var str = event && event.reason ? String(event.reason.message || event.reason.stack || event.reason) : '';
+          if (
+            str.indexOf('WebSocket') !== -1 ||
+            str.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
+            str.indexOf('@vite/client') !== -1
+          ) {
+            event.preventDefault();
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+          }
+        }, true);
+
+        window.addEventListener('error', function(event) {
+          var str = event && event.message ? String(event.message) : '';
+          var fn = event && event.filename ? String(event.filename) : '';
+          if (
+            str.indexOf('WebSocket') !== -1 ||
+            str.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
+            fn.indexOf('@vite/client') !== -1
+          ) {
+            event.preventDefault();
+            if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+      })();
+    </script>
+    <title>sorteoo.app - Sorteos de Instagram con Grabación Automática</title>
+    <meta name="description" content="Plataforma moderna para realizar sorteos de comentarios de Instagram con grabación automática de video en formato vertical 9:16 para Reels y Stories." />
+    <meta property="og:title" content="sorteoo.app - Sorteos de Instagram con Grabación Automática" />
+    <meta property="og:description" content="Plataforma moderna para realizar sorteos de comentarios de Instagram con grabación automática de video en formato vertical 9:16 para Reels y Stories." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
